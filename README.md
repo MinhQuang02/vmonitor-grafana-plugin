@@ -92,7 +92,7 @@ The two warnings are expected on an unsigned build. The plugin now appears under
 
 ### 1. Create a service account key pair
 
-The plugin authenticates as an IAM service account. Follow these steps in the [GreenNode IAM console](https://hcm-3.console.vngcloud.vn/iam):
+The plugin authenticates as an IAM service account. Follow these steps in the [GreenNode IAM console](https://iam.console.greennode.ai/):
 
 **a. Create a service account**
 

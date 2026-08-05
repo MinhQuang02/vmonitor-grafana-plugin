@@ -92,7 +92,27 @@ The two warnings are expected on an unsigned build. The plugin now appears under
 
 ### 1. Create a service account key pair
 
-In the GreenNode IAM console, create a service account and generate a key/secret pair with, at minimum, permission to read vMonitor metrics and log projects. You will paste both values into Grafana in the next step.
+The plugin authenticates as an IAM service account. Follow these steps in the [GreenNode IAM console](https://hcm-3.console.vngcloud.vn/iam):
+
+**a. Create a service account**
+
+1. Go to **Service Accounts → Create service account**
+2. Enter a name (e.g. `grafana-vmonitor-readonly`) and click **Create**
+
+**b. Attach the vMonitor read policy**
+
+1. Open the service account you just created
+2. Go to the **Policies** tab → **Attach policies**
+3. Search for and select **`vMonitorMetricReadOnlyAccess`**
+4. If you also need log queries, additionally attach **`vMonitorLogReadOnlyAccess`**
+5. Click **Attach**
+
+**c. Generate a key pair**
+
+1. Go to the **Keys** tab → **Create key**
+2. Copy and save both values immediately — the secret is shown only once:
+   - **Access Key ID** → use as **Client ID** in Grafana
+   - **Secret Access Key** → use as **Client Secret** in Grafana
 
 ### 2. Add the data source
 

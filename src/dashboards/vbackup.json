@@ -1,0 +1,248 @@
+{
+  "uid": "vmonitor-vbackup",
+  "title": "vMonitor / vBackup",
+  "tags": [
+    "vmonitor",
+    "greennode",
+    "vbackup"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "",
+  "time": {
+    "from": "now-60m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "greennode-vmonitor-datasource",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "location",
+        "type": "query",
+        "label": "Backup location",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "infrastructure(vbackup)",
+        "definition": "infrastructure(vbackup)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total backup failed",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vbk.location.failed_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vbackup"
+            },
+            {
+              "key": "backup_location_id",
+              "value": "$location"
+            }
+          ],
+          "groupBy": [
+            "region",
+            "type"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#d50000"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Total backup success",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vbk.location.success_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vbackup"
+            },
+            {
+              "key": "backup_location_id",
+              "value": "$location"
+            }
+          ],
+          "groupBy": [
+            "region",
+            "type"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#00c853"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 24,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vbk.location.usage",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vbackup"
+            },
+            {
+              "key": "backup_location_id",
+              "value": "$location"
+            }
+          ],
+          "groupBy": [
+            "region",
+            "type"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    }
+  ]
+}

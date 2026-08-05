@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "GreenNode vMonitor",
+  "id": "greennode-vmonitor-datasource",
+  "metrics": true,
+  "logs": true,
+  "alerting": true,
+  "backend": true,
+  "executable": "gpx_green_node_v_monitor",
+  "includes": [
+    { "type": "dashboard", "name": "vMonitor / Host", "path": "dashboards/host.json" },
+    { "type": "dashboard", "name": "vMonitor / vServer", "path": "dashboards/vserver.json" },
+    { "type": "dashboard", "name": "vMonitor / vLB (Load Balancer)", "path": "dashboards/vlb.json" },
+    { "type": "dashboard", "name": "vMonitor / vDB (Relational)", "path": "dashboards/vdb.json" },
+    { "type": "dashboard", "name": "vMonitor / vDB (Kafka)", "path": "dashboards/vdb-kafka.json" },
+    { "type": "dashboard", "name": "vMonitor / vStorage", "path": "dashboards/vstorage.json" },
+    { "type": "dashboard", "name": "vMonitor / vStorage (Bucket)", "path": "dashboards/vstorage-bucket.json" },
+    { "type": "dashboard", "name": "vMonitor / vBackup", "path": "dashboards/vbackup.json" }
+  ],
+  "info": {
+    "description": "Query GreenNode vMonitor Platform Metric and Log data in Grafana, alert on both with Grafana alerting, and start from the bundled dashboards for host, vServer, vDB, vLB, vStorage and vBackup.",
+    "author": {
+      "name": "GreenNode"
+    },
+    "keywords": ["datasource", "greennode", "vmonitor", "metrics", "logs", "alerting"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      { "name": "vMonitor Platform documentation", "url": "https://docs.greennode.ai/vmonitor" },
+      { "name": "vMonitor Platform Metric", "url": "https://docs.greennode.ai/vmonitor/vmonitor-platform-la-gi/vmonitor-platform-metric-la-gi" },
+      { "name": "vMonitor Platform Log", "url": "https://docs.greennode.ai/vmonitor/vmonitor-platform-la-gi/vmonitor-platform-log-la-gi" }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=12.3.0",
+    "plugins": []
+  }
+}

@@ -1,0 +1,1001 @@
+{
+  "uid": "vmonitor-host",
+  "title": "vMonitor / Host",
+  "tags": [
+    "vmonitor",
+    "greennode",
+    "host"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "",
+  "time": {
+    "from": "now-60m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "greennode-vmonitor-datasource",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "host",
+        "type": "query",
+        "label": "Host",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "infrastructure(host)",
+        "definition": "infrastructure(host)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "CPU Usage(percent)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "cpu.usage_guest",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "cpu.usage_guest:host:$host"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "cpu.usage_user",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "cpu.usage_user:host:$host"
+        },
+        {
+          "refId": "C",
+          "queryMode": "metric",
+          "metricName": "cpu.usage_iowait",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "cpu.usage_iowait:host:$host"
+        },
+        {
+          "refId": "D",
+          "queryMode": "metric",
+          "metricName": "cpu.usage_idle",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "cpu.usage_idle:host:$host"
+        },
+        {
+          "refId": "E",
+          "queryMode": "metric",
+          "metricName": "cpu.usage_system",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "cpu.usage_system:host:$host"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 20,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cpu.usage_guest:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#ff6d00"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cpu.usage_user:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#c51162"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cpu.usage_iowait:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#ffab00"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cpu.usage_idle:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cpu.usage_system:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#d50000"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Memory Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "mem.cached",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "mem.cached:host:$host"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "mem.buffered",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "mem.buffered:host:$host"
+        },
+        {
+          "refId": "C",
+          "queryMode": "metric",
+          "metricName": "mem.used",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "mem.used:host:$host"
+        },
+        {
+          "refId": "D",
+          "queryMode": "metric",
+          "metricName": "mem.free",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "mem.free:host:$host"
+        },
+        {
+          "refId": "E",
+          "queryMode": "metric",
+          "metricName": "mem.shared",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "mem.shared:host:$host"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 20,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem.cached:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem.buffered:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem.used:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#c51162"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem.free:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem.shared:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Load Averages",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "system.load5",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "system.load5:host:$host"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "system.load15",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "system.load15:host:$host"
+        },
+        {
+          "refId": "C",
+          "queryMode": "metric",
+          "metricName": "system.load1",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "system.load1:host:$host"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "system.load5:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#aa00ff"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "system.load15:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#d50000"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "system.load1:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#6200ea"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Swap Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "mem.swap_free",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "mem.swap_free:host:$host"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "mem.swap_cached",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "mem.swap_cached:host:$host"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 20,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem.swap_free:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem.swap_cached:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#c51162"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Disk Usage by device(percent)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "disk.used_percent",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "disk.used_percent:host:$host,group-by:device"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Disk IOPS",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "diskio.writes",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "diskio.writes:host:$host",
+          "rate": "per_second"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "diskio.reads",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "diskio.reads:host:$host",
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "diskio.writes:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#aa00ff"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "diskio.reads:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#d50000"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Network Traffic(bytes/s)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "net.bytes_recv",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "net.bytes_recv:host:$host",
+          "rate": "per_second"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "net.bytes_sent",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "net.bytes_sent:host:$host",
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "net.bytes_recv:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#c51162"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "net.bytes_sent:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#aa00ff"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Network Traffic (package/s)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "net.packets_sent",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "net.packets_sent:host:$host",
+          "rate": "per_second"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "net.packets_recv",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "host",
+              "value": "$host"
+            }
+          ],
+          "groupBy": [],
+          "alias": "net.packets_recv:host:$host",
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "net.packets_sent:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "net.packets_recv:host:$host"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#0091ea"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    }
+  ]
+}

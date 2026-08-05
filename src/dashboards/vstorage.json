@@ -1,0 +1,1185 @@
+{
+  "uid": "vmonitor-vstorage",
+  "title": "vMonitor / vStorage",
+  "tags": [
+    "vmonitor",
+    "greennode",
+    "vstorage"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "",
+  "time": {
+    "from": "now-60m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "greennode-vmonitor-datasource",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "project",
+        "type": "query",
+        "label": "Project",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "infrastructure(vstorage)",
+        "definition": "infrastructure(vstorage)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Project Usage Percent",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_stats.used_percent",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_stats.used_percent"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#aa00ff"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Total Bytes Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_stats.bytes_used",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_stats.bytes_used"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Project Quota",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 0,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_stats.quota_bytes",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_stats.quota_bytes"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Total Containers",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_stats.container_count",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_stats.container_count"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#00bfa5"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Total Objects",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_stats.object_count",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_stats.object_count"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#6200ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 6,
+      "title": "Project Capacity Trend",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_stats.bytes_used",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_stats.bytes_used"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear",
+            "axisLabel": "Bytes"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_stats.bytes_used"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#d50000"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Request response time",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_requests.request_time.mean",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [
+            "direction"
+          ],
+          "alias": "vstorage.account_requests.request_time.mean"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear",
+            "axisLabel": "Response Time (s)"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Container Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.container_stats.bytes_used",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            },
+            {
+              "key": "status",
+              "value": "ACTIVE"
+            }
+          ],
+          "groupBy": [
+            "container"
+          ],
+          "alias": "vstorage.container_stats.bytes_used"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear",
+            "axisLabel": "Bytes Used / Container"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Project Requests",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_requests.request_total.value_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "tier",
+              "value": "all"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_requests.request_total.value_rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 20,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear",
+            "axisLabel": "Request/s"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_requests.request_total.value_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00c853"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "Project Traffic",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_net.bytes_sent_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_net.bytes_sent_rate"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_net_vngcloud.bytes_recvd_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_net_vngcloud.bytes_recvd_rate"
+        },
+        {
+          "refId": "C",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_net_vngcloud.bytes_sent_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_net_vngcloud.bytes_sent_rate"
+        },
+        {
+          "refId": "D",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_net.bytes_recvd_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_net.bytes_recvd_rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 20,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear",
+            "axisLabel": "Bytes/s"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_net.bytes_sent_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00bfa5"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_net_vngcloud.bytes_recvd_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00c853"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_net_vngcloud.bytes_sent_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#64dd17"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_net.bytes_recvd_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 11,
+      "title": "Requests per method",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_requests.method.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            },
+            {
+              "key": "tier",
+              "value": "all"
+            }
+          ],
+          "groupBy": [
+            "method"
+          ],
+          "alias": "vstorage.account_requests.method.value_rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 20,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear",
+            "axisLabel": "Request/s"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 12,
+      "title": "Country Traffic",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_net_country.bytes_sent_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [
+            "country"
+          ],
+          "alias": "vstorage.account_net_country.bytes_sent_rate"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_net_country.bytes_recvd_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [
+            "country"
+          ],
+          "alias": "vstorage.account_net_country.bytes_recvd_rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear",
+            "axisLabel": "Bytes/s"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 13,
+      "title": "Response Status Code",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_requests.status.value_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "tier",
+              "value": "all"
+            },
+            {
+              "key": "status",
+              "value": "4xx"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_requests.status.value_rate"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_requests.status.value_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "tier",
+              "value": "all"
+            },
+            {
+              "key": "status",
+              "value": "5xx"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_requests.status.value_rate"
+        },
+        {
+          "refId": "C",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_requests.status.value_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "tier",
+              "value": "all"
+            },
+            {
+              "key": "status",
+              "value": "3xx"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_requests.status.value_rate"
+        },
+        {
+          "refId": "D",
+          "queryMode": "metric",
+          "metricName": "vstorage.account_requests.status.value_rate",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "tier",
+              "value": "all"
+            },
+            {
+              "key": "status",
+              "value": "2xx"
+            },
+            {
+              "key": "project_id",
+              "value": "$project"
+            }
+          ],
+          "groupBy": [],
+          "alias": "vstorage.account_requests.status.value_rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear",
+            "axisLabel": "Request/s"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_requests.status.value_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#ffab00"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_requests.status.value_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#d50000"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_requests.status.value_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#ffd600"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vstorage.account_requests.status.value_rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#0091ea"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    }
+  ]
+}

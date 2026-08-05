@@ -1,0 +1,1562 @@
+{
+  "uid": "vmonitor-vdb-kafka",
+  "title": "vMonitor / vDB (Kafka)",
+  "tags": [
+    "vmonitor",
+    "greennode",
+    "vdb-kafka"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "greennode-vmonitor-datasource",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "cluster",
+        "type": "query",
+        "label": "Kafka cluster",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "infrastructure(vdb-kafka)",
+        "definition": "infrastructure(vdb-kafka)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Brokers Online",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_server_replicamanager_leadercount",
+          "statistic": "count",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "rollup": {
+            "type": "max",
+            "value": 2.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Topics",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partitions",
+          "statistic": "count",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Partitions",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 0,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partitions",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Replicas",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partition_replicas",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 5,
+      "title": "In Sync Replicas",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partition_in_sync_replica",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#aeea00"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 6,
+      "title": "Partitions at minimum ISR",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_cluster_partition_atminisr",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#ffab00"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 7,
+      "title": "Partitions under minimum ISR",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 4,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_cluster_partition_underminisr",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#ffab00"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 8,
+      "title": "Under Replicated Partitions",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 4,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partition_under_replicated_partition",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#d50000"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 9,
+      "title": "Offline Partitions Count",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 4,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_controller_kafkacontroller_offlinepartitionscount",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#d50000"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 10,
+      "title": "Unclean Leader Election",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 4,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_controller_controllerstats_uncleanleaderelections_total",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#d50000"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 11,
+      "title": "CPU Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.container_cpu_usage_seconds_total",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 12,
+      "title": "Memory Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 8,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.container_memory_usage_bytes",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 13,
+      "title": "Available Disk Space",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 8,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kubelet_volume_stats_available_bytes",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "persistentvolumeclaim"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 14,
+      "title": "Messages in per second",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partition_current_offset",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "topic"
+          ],
+          "rate": "per_second",
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 15,
+      "title": "Byte Rate",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 12,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_server_brokertopicmetrics_bytesin_total",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "alias": "Total Incoming Byte Rate",
+          "rate": "per_second",
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_server_brokertopicmetrics_bytesout_total",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "alias": "Total Outgoing Byte Rate",
+          "rate": "per_second",
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total Incoming Byte Rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#0091ea"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total Outgoing Byte Rate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#ffd600"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 16,
+      "title": "Messages consumed per second",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 12,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_consumergroup_current_offset",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "consumergroup",
+            "topic"
+          ],
+          "rate": "per_second",
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 17,
+      "title": "Number of Partitions",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partitions",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "topic"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "bargauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true
+      }
+    },
+    {
+      "id": 18,
+      "title": "Latest Offsets",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 16,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partition_current_offset",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "partition",
+            "topic"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "bargauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true
+      }
+    },
+    {
+      "id": 19,
+      "title": "Oldest Offsets",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 16,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_topic_partition_oldest_offset",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "partition",
+            "topic"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "bargauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true
+      }
+    },
+    {
+      "id": 20,
+      "title": "Consumer Group Lag",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_consumergroup_lag",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "consumergroup",
+            "partition",
+            "topic"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "bargauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true
+      }
+    },
+    {
+      "id": 21,
+      "title": "Lag by Consumer Group",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 20,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_consumergroup_lag",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "consumergroup",
+            "topic"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 22,
+      "title": "Consumer Group Offsets",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 20,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vkafka.kafka_consumergroup_current_offset",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vkafka"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "consumergroup",
+            "partition",
+            "topic"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "bargauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true
+      }
+    }
+  ]
+}

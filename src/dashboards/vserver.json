@@ -1,0 +1,510 @@
+{
+  "uid": "vmonitor-vserver",
+  "title": "vMonitor / vServer",
+  "tags": [
+    "vmonitor",
+    "greennode",
+    "vserver"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "",
+  "time": {
+    "from": "now-60m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "greennode-vmonitor-datasource",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "instance",
+        "type": "query",
+        "label": "Instance",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "infrastructure(vserver)",
+        "definition": "infrastructure(vserver)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Current CPU Utilization",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vserver.cpu.utilization_norm_perc",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vserver"
+            },
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            }
+          ],
+          "groupBy": [],
+          "alias": "cpu_utilization"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#00c853"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 2,
+      "title": "CPU Utilization",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 0,
+        "w": 17,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vserver.cpu.utilization_norm_perc",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            },
+            {
+              "key": "product",
+              "value": "vserver"
+            }
+          ],
+          "groupBy": [],
+          "alias": "cpu_utillization"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cpu_utillization"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00c853"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Disk IO Bytes/s by device",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vserver.io.read_bytes_sec",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vserver"
+            },
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "read_bytes_sec"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vserver.io.write_bytes_sec",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            },
+            {
+              "key": "product",
+              "value": "vserver"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "write_bytes_sec"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Disk IO Operations/s by device",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vserver.io.read_ops_sec",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vserver"
+            },
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "read_ops_sec"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vserver.io.write_ops_sec",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vserver"
+            },
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "write_ops_sec"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Network Traffic by device",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vserver.net.in_bytes_sec",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            },
+            {
+              "key": "product",
+              "value": "vserver"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "net_bytes_in"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vserver.net.out_bytes_sec",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            },
+            {
+              "key": "product",
+              "value": "vserver"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "net_bytes_out"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Network Packets/s by device",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vserver.net.in_packets_sec",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            },
+            {
+              "key": "product",
+              "value": "vserver"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "net_pack_in"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vserver.net.out_packets_sec",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "resource_id",
+              "value": "$instance"
+            },
+            {
+              "key": "product",
+              "value": "vserver"
+            }
+          ],
+          "groupBy": [
+            "device"
+          ],
+          "alias": "net_pack_out"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    }
+  ]
+}

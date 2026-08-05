@@ -1,0 +1,1177 @@
+{
+  "uid": "vmonitor-vstorage-bucket",
+  "title": "vMonitor / vStorage (Bucket)",
+  "tags": [
+    "vmonitor",
+    "greennode",
+    "vstorage-bucket"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "60s",
+  "time": {
+    "from": "now-90m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "greennode-vmonitor-datasource",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "region",
+        "type": "query",
+        "label": "Region",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "regions(vstorage-bucket)",
+        "definition": "regions(vstorage-bucket)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      },
+      {
+        "name": "bucket",
+        "type": "query",
+        "label": "Bucket",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "infrastructure(vstorage-bucket, $region)",
+        "definition": "infrastructure(vstorage-bucket, $region)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Bucket Objects",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_stats.object_count",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": [],
+          "alias": "Objects"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#00b8d4"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Total Objects",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 0,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_stats.object_count",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": [],
+          "alias": "Objects"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Objects"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#0091ea"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Request per second",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 0,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.request_total.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "class",
+              "value": "all"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Bucket Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_stats.bytes_used",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": [],
+          "alias": "Usage"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Bucket Usage",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 4,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_stats.bytes_used",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": [],
+          "alias": "Usage"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Usage"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#00b8d4"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Requests time millisecond",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 4,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.request_time_second.mean",
+          "statistic": "min",
+          "filters": [
+            {
+              "key": "direction",
+              "value": "download"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": [
+            "direction"
+          ],
+          "alias": "p50"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.request_time_second.99_percentile",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "direction",
+              "value": "download"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": [
+            "direction"
+          ],
+          "alias": "p99"
+        },
+        {
+          "refId": "C",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.request_time_second.mean",
+          "statistic": "min",
+          "filters": [
+            {
+              "key": "direction",
+              "value": "upload"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": [
+            "direction"
+          ],
+          "alias": "p50"
+        },
+        {
+          "refId": "D",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.request_time_second.99_percentile",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "direction",
+              "value": "upload"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": [
+            "direction"
+          ],
+          "alias": "p99"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Request.Status.2xx",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.status.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "class",
+              "value": "all"
+            },
+            {
+              "key": "status",
+              "value": "2xx"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Request.Status.4xx",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 8,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.status.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "class",
+              "value": "all"
+            },
+            {
+              "key": "status",
+              "value": "4xx"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Request.Status.5xx",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 8,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.status.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "class",
+              "value": "all"
+            },
+            {
+              "key": "status",
+              "value": "5xx"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "Request.Method.GET",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.method.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "class",
+              "value": "all"
+            },
+            {
+              "key": "method",
+              "value": "GET"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 11,
+      "title": "Request.Method.HEAD",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 12,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.method.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "class",
+              "value": "all"
+            },
+            {
+              "key": "method",
+              "value": "HEAD"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 12,
+      "title": "Bandwidth.Download",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 12,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_net.bytes_sent_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 13,
+      "title": "Request.Method.PUT",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.method.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "class",
+              "value": "all"
+            },
+            {
+              "key": "method",
+              "value": "PUT"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 14,
+      "title": "Request.Method.DELETE",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 16,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_requests.method.value_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "class",
+              "value": "all"
+            },
+            {
+              "key": "method",
+              "value": "DELETE"
+            },
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 15,
+      "title": "Bandwidth.Upload",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 16,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vstorage.bucket_net.bytes_recvd_rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vstorage"
+            },
+            {
+              "key": "bucket",
+              "value": "$bucket"
+            },
+            {
+              "key": "region",
+              "value": "$region"
+            }
+          ],
+          "groupBy": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    }
+  ]
+}

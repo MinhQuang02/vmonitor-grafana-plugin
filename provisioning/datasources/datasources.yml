@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: 'GreenNode vMonitor'
+    type: 'greennode-vmonitor-datasource'
+    uid: 'greennode-vmonitor'
+    access: proxy
+    isDefault: true
+    editable: true
+    jsonData:
+      url: 'https://vmonitorapis.vngcloud.vn/vmonitor-api/api'
+      clientId: '$VM_CLIENT_ID'
+      tokenUrl: 'https://iamapis.vngcloud.vn/accounts-api/v2/auth/token'
+    secureJsonData:
+      clientSecret: '$VM_CLIENT_SECRET'

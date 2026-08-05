@@ -1,0 +1,442 @@
+{
+  "uid": "vmonitor-vlb",
+  "title": "vMonitor / vLB (Load Balancer)",
+  "tags": [
+    "vmonitor",
+    "greennode",
+    "vlb"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "",
+  "time": {
+    "from": "now-60m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "greennode-vmonitor-datasource",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "lb",
+        "type": "query",
+        "label": "Load balancer",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "infrastructure(vlb)",
+        "definition": "infrastructure(vlb)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total Unhealthy Members",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vlb.member.status_down",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "loadbalancer_id",
+              "value": "$lb"
+            },
+            {
+              "key": "product",
+              "value": "vlb"
+            },
+            {
+              "key": "layer",
+              "value": "4"
+            }
+          ],
+          "groupBy": [
+            "role"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#d50000"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Total Healthy Members",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vlb.member.status_up",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "loadbalancer_id",
+              "value": "$lb"
+            },
+            {
+              "key": "product",
+              "value": "vlb"
+            },
+            {
+              "key": "layer",
+              "value": "4"
+            }
+          ],
+          "groupBy": [
+            "role"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#00c853"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Active Connections",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 0,
+        "w": 14,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vlb.listener.scur",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "loadbalancer_id",
+              "value": "$lb"
+            },
+            {
+              "key": "product",
+              "value": "vlb"
+            },
+            {
+              "key": "layer",
+              "value": "4"
+            }
+          ],
+          "groupBy": [
+            "role"
+          ]
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vlb.listener.slim",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "loadbalancer_id",
+              "value": "$lb"
+            },
+            {
+              "key": "product",
+              "value": "vlb"
+            },
+            {
+              "key": "layer",
+              "value": "4"
+            }
+          ],
+          "groupBy": [],
+          "alias": "max_connections"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "max_connections"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#d50000"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "New Connections (conns per sec)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vlb.listener.rate",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "loadbalancer_id",
+              "value": "$lb"
+            },
+            {
+              "key": "product",
+              "value": "vlb"
+            },
+            {
+              "key": "layer",
+              "value": "4"
+            }
+          ],
+          "groupBy": [
+            "role"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Network In/Out",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vlb.listener.bout",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "loadbalancer_id",
+              "value": "$lb"
+            },
+            {
+              "key": "product",
+              "value": "vlb"
+            },
+            {
+              "key": "layer",
+              "value": "4"
+            }
+          ],
+          "groupBy": [
+            "role"
+          ],
+          "alias": "net_bytes_out"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vlb.listener.bin",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "loadbalancer_id",
+              "value": "$lb"
+            },
+            {
+              "key": "product",
+              "value": "vlb"
+            },
+            {
+              "key": "layer",
+              "value": "4"
+            }
+          ],
+          "groupBy": [
+            "role"
+          ],
+          "alias": "net_bytes_in"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": false,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    }
+  ]
+}

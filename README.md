@@ -44,14 +44,14 @@
 
 ### Bước 1: Giải nén file plugin
 
-Giải nén file `greennode-vmonitor-datasource-1.0.1.zip` vào thư mục plugin của Grafana:
+Giải nén file `greennode-vmonitor-datasource-1.0.0.zip` vào thư mục plugin của Grafana:
 
 ```bash
 # Linux/macOS
-unzip greennode-vmonitor-datasource-1.0.1.zip -d /var/lib/grafana/plugins/
+unzip greennode-vmonitor-datasource-1.0.0.zip -d /var/lib/grafana/plugins/
 
 # Hoặc đường dẫn tuỳ theo cấu hình Grafana của bạn
-unzip greennode-vmonitor-datasource-1.0.1.zip -d /path/to/grafana/plugins/
+unzip greennode-vmonitor-datasource-1.0.0.zip -d /path/to/grafana/plugins/
 ```
 
 Sau khi giải nén, cấu trúc thư mục sẽ là:

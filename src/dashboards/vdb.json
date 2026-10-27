@@ -1,6 +1,6 @@
 {
   "uid": "vmonitor-vdb",
-  "title": "vMonitor / vDB (Relational)",
+  "title": "vMonitor / vDB (Relational / MemoryStore Single-Node)",
   "tags": [
     "vmonitor",
     "greennode",

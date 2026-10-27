@@ -1,6 +1,6 @@
 {
   "uid": "vmonitor-vdb-postgre-cluster",
-  "title": "vMonitor / vDB (PostgreSQL Cluster)",
+  "title": "vMonitor / vDB (Relational / MemoryStore Cluster)",
   "tags": [
     "vmonitor",
     "greennode",

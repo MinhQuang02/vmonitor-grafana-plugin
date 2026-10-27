@@ -102,8 +102,8 @@ with no Group by.
 2. Click **Save & test**. The backend exchanges the access key for a Bearer
    token; the secret is stored encrypted and never reaches the browser.
 3. Import a bundled dashboard from the plugin's **Dashboards** tab — one exists
-   for Host, vServer, vLB, vDB (relational, Kafka and PostgreSQL cluster),
-   vStorage (project and bucket) and vBackup.
+   for Host, vServer, vLB, vDB (Relational / MemoryStore Single-Node and
+   Cluster, Kafka), vStorage (project and bucket) and vBackup.
 
 Each dashboard lists every resource of its product, including resources without
 detailed monitoring enabled, and defaults to that product's platform-level

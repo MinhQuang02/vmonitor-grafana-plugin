@@ -21,17 +21,17 @@ The release archive ships backend binaries for Linux (amd64, arm64, arm), macOS 
 
 ### 1. Download the release archive
 
-Grab the latest ZIP from the [releases page](https://github.com/GreenNodeHub/vmonitor-grafana-plugin/releases):
+Grab the latest ZIP from the [releases page](https://github.com/MinhQuang02/vmonitor-grafana-plugin/releases):
 
 ```bash
-wget https://github.com/GreenNodeHub/vmonitor-grafana-plugin/releases/download/v1.0.0/greennode-vmonitor-datasource-1.0.0.zip
+wget https://github.com/MinhQuang02/vmonitor-grafana-plugin/releases/download/v1.1.0/greennode-vmonitor-datasource-1.1.0.zip
 ```
 
 ### 2. Unpack it into the Grafana plugin directory
 
 ```bash
 sudo mkdir -p /var/lib/grafana/plugins
-sudo unzip greennode-vmonitor-datasource-1.0.0.zip \
+sudo unzip greennode-vmonitor-datasource-1.1.0.zip \
   -d /var/lib/grafana/plugins/greennode-vmonitor-datasource
 ```
 
@@ -288,7 +288,7 @@ mage -v         # backend binaries for every platform, into dist/
 `dist/` now holds the same layout as the release archive. Package it with:
 
 ```bash
-cd dist && zip -r ../greennode-vmonitor-datasource-1.0.0.zip . && cd ..
+cd dist && zip -r ../greennode-vmonitor-datasource-1.1.0.zip . && cd ..
 ```
 
 ## Development

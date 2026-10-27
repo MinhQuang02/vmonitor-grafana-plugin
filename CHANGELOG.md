@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 (2026-10-27)
+
+- Bundled dashboard for vDB PostgreSQL clusters, "vMonitor / vDB (Relational /
+  MemoryStore Cluster)", matching the vMonitor default dashboard.
+- The vDB relational dashboard is renamed "vMonitor / vDB (Relational /
+  MemoryStore Single-Node)", after the vDB tabs in the vMonitor portal.
+- A dimension filter whose value is `*` is dropped, as vMonitor does for a
+  variable set to All.
+
 ## 1.0.0 (2026-08-05)
 
 Initial release.

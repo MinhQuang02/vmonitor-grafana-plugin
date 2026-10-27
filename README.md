@@ -7,7 +7,7 @@ Query GreenNode vMonitor Platform metrics and logs from Grafana — build dashbo
 - Log queries against a vMonitor log project, rendered as log lines, a table, or a count over time.
 - Alerting on metrics and on log counts, covering vMonitor's Metric Alarm and a log alarm's Frequency and Flatline types.
 - Template variables: `metrics()`, `dimensions(metric)`, `dimensionValues(metric, key)`, `infrastructure(product[, region])` and `regions(product)`.
-- Bundled dashboards for Host, vServer, vLB, vDB (relational and Kafka), vStorage (project and bucket) and vBackup.
+- Bundled dashboards for Host, vServer, vLB, vDB (relational, Kafka and PostgreSQL cluster), vStorage (project and bucket) and vBackup.
 
 ## Requirements
 
@@ -259,6 +259,8 @@ Split the log count into separate series by selecting one or more aggregatable (
 **Example — dynamic vServer dashboard:**
 - Variable `server`: `infrastructure(vserver)`
 - Filter in query: `resource_id = $server`
+
+A filter whose value is `*` is dropped, as vMonitor does for a variable set to All. Give a dimension variable **Include All option** with custom all value `*` to get the same behaviour.
 
 ## Alerting
 

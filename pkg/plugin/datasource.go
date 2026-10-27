@@ -415,10 +415,13 @@ func buildGraph(qm queryModel) vmonitor.Graph {
 	return g
 }
 
+// anyDimensionValue is vMonitor's All value for a dimension variable: the filter is dropped.
+const anyDimensionValue = "*"
+
 func joinFilters(filters []dimensionFilter) string {
 	parts := make([]string, 0, len(filters))
 	for _, f := range filters {
-		if f.Key == "" || f.Value == "" {
+		if f.Key == "" || f.Value == "" || f.Value == anyDimensionValue {
 			continue
 		}
 		parts = append(parts, f.Key+":"+f.Value)

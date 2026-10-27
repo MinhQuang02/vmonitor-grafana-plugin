@@ -1,0 +1,2086 @@
+{
+  "uid": "vmonitor-vdb-postgre-cluster",
+  "title": "vMonitor / vDB (PostgreSQL Cluster)",
+  "tags": [
+    "vmonitor",
+    "greennode",
+    "vdb-postgre"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "label": "Data source",
+        "query": "greennode-vmonitor-datasource",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "cluster",
+        "type": "query",
+        "label": "PostgreSQL cluster",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "infrastructure(vdb-cluster)",
+        "definition": "infrastructure(vdb-cluster)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {},
+        "options": [],
+        "includeAll": false,
+        "multi": false,
+        "regex": ""
+      },
+      {
+        "name": "datname",
+        "type": "query",
+        "label": "Database",
+        "datasource": {
+          "type": "greennode-vmonitor-datasource",
+          "uid": "${datasource}"
+        },
+        "query": "dimensionValues(vdb.pg.pg_stat_database_tup_fetched, datname)",
+        "definition": "dimensionValues(vdb.pg.pg_stat_database_tup_fetched, datname)",
+        "refresh": 2,
+        "sort": 1,
+        "hide": 0,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [],
+        "includeAll": true,
+        "allValue": "*",
+        "multi": false,
+        "regex": ""
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "PostgreSQL Online Nodes",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_up",
+          "statistic": "count",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [],
+          "alias": "Nodes"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 2,
+      "title": "PostgreSQL Version",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_version",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "short_version"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Mem Usage (Percent)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 0,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.node_memory_working_set_bytes",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "metrics_path",
+              "value": "/metrics/cadvisor"
+            },
+            {
+              "key": "container",
+              "value": "postgres"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "hide": true
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.node_spec_memory_limit_bytes",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "metrics_path",
+              "value": "/metrics/cadvisor"
+            },
+            {
+              "key": "container",
+              "value": "postgres"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "hide": true
+        },
+        {
+          "refId": "C",
+          "queryMode": "expression",
+          "expression": "A / B * 100"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "CPU Usage (Percent)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 0,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.node_cpu_usage_seconds_total",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "metrics_path",
+              "value": "/metrics/cadvisor"
+            },
+            {
+              "key": "container",
+              "value": "postgres"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "rate": "per_second",
+          "hide": true
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.node_spec_cpu_quota",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "metrics_path",
+              "value": "/metrics/cadvisor"
+            },
+            {
+              "key": "container",
+              "value": "postgres"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "hide": true
+        },
+        {
+          "refId": "C",
+          "queryMode": "expression",
+          "expression": "A / (B / 100000) * 100"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Connection Usage (Percent)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_numbackends",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "hide": true
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_max_connections",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "hide": true
+        },
+        {
+          "refId": "C",
+          "queryMode": "expression",
+          "expression": "A / B * 100"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Volume Usage (Percent)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 8,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.node_volume_stats_used_bytes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "pg_volume"
+          ],
+          "hide": true
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.node_volume_stats_capacity_bytes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "pg_volume"
+          ],
+          "hide": true
+        },
+        {
+          "refId": "C",
+          "queryMode": "expression",
+          "expression": "A / B * 100"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Available Volume",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 8,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.node_volume_stats_available_bytes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "pg_volume"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "bargauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true
+      }
+    },
+    {
+      "id": 8,
+      "title": "Max Connections",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_max_connections",
+          "statistic": "avg",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 9,
+      "title": "Shared Buffers",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 16,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_shared_buffers_bytes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 10,
+      "title": "Maintenance Work Mem",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 16,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_maintenance_work_mem_bytes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 11,
+      "title": "Work Mem",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 16,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_work_mem_bytes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 12,
+      "title": "Max WAL Size",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 16,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_max_wal_size_bytes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 13,
+      "title": "Random Page Cost",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_random_page_cost",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 14,
+      "title": "Effective Cache",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 24,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_effective_cache_size_bytes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 15,
+      "title": "Max Worker Processes",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 24,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_max_worker_processes",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 16,
+      "title": "Seq Page Cost",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 24,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_seq_page_cost",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 17,
+      "title": "Max Parallel Workers",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 24,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_settings_max_parallel_workers",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "cluster_name"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 18,
+      "title": "Overview of connections",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_activity_count",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "state",
+              "value": "active"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          },
+          "alias": "Active connections"
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_activity_count",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "state",
+              "value": "idle"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "node_name"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          },
+          "alias": "Idle connections"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "stat",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 19,
+      "title": "Replication Slot Active",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 32,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_replication_slots_active",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "replication_slot"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#0091ea"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "bargauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true
+      }
+    },
+    {
+      "id": 20,
+      "title": "Replication lag",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 32,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_replication_pg_wal_lsn_diff",
+          "statistic": "max",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "state",
+              "value": "streaming"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            }
+          ],
+          "groupBy": [
+            "replication_slot",
+            "replica_node"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 21,
+      "title": "Cache Hit Rate (percent)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 40,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_blks_hit",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datname",
+            "node_name",
+            "datid"
+          ],
+          "rate": "per_second",
+          "hide": true
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_blks_read",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datname",
+            "node_name",
+            "datid"
+          ],
+          "rate": "per_second",
+          "hide": true
+        },
+        {
+          "refId": "C",
+          "queryMode": "expression",
+          "expression": "A / (A + B) * 100"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 22,
+      "title": "Index Efficiency Ratio By Database",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 40,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_tup_fetched",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datid",
+            "datname"
+          ],
+          "rate": "per_second",
+          "hide": true
+        },
+        {
+          "refId": "B",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_tup_returned",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datname",
+            "datid"
+          ],
+          "rate": "per_second",
+          "hide": true
+        },
+        {
+          "refId": "C",
+          "queryMode": "expression",
+          "expression": "A / B * 100"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 23,
+      "title": "Fetch data (SELECT)",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 48,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_tup_fetched",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datname",
+            "datid"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          },
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 24,
+      "title": "Return data",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 48,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_tup_returned",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datname",
+            "datid"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          },
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 25,
+      "title": "Update data",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 56,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_tup_updated",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datname",
+            "datid"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          },
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 26,
+      "title": "Insert Data",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 7,
+        "y": 56,
+        "w": 10,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_tup_inserted",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datname",
+            "datid"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          },
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 27,
+      "title": "Delete Data",
+      "datasource": {
+        "type": "greennode-vmonitor-datasource",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 17,
+        "y": 56,
+        "w": 7,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryMode": "metric",
+          "metricName": "vdb.pg.pg_stat_database_tup_deleted",
+          "statistic": "sum",
+          "filters": [
+            {
+              "key": "product",
+              "value": "vdb-postgre"
+            },
+            {
+              "key": "cluster_id",
+              "value": "$cluster"
+            },
+            {
+              "key": "datname",
+              "value": "$datname"
+            }
+          ],
+          "groupBy": [
+            "datname",
+            "datid"
+          ],
+          "rollup": {
+            "type": "avg",
+            "value": 1.0,
+            "unit": "minutes"
+          },
+          "rate": "per_second"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true,
+            "lineInterpolation": "linear"
+          }
+        },
+        "overrides": []
+      },
+      "interval": "60s",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      }
+    }
+  ]
+}

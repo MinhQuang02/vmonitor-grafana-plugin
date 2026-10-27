@@ -14,6 +14,7 @@
     { "type": "dashboard", "name": "vMonitor / vLB (Load Balancer)", "path": "dashboards/vlb.json" },
     { "type": "dashboard", "name": "vMonitor / vDB (Relational)", "path": "dashboards/vdb.json" },
     { "type": "dashboard", "name": "vMonitor / vDB (Kafka)", "path": "dashboards/vdb-kafka.json" },
+    { "type": "dashboard", "name": "vMonitor / vDB (PostgreSQL Cluster)", "path": "dashboards/vdb-postgre-cluster.json" },
     { "type": "dashboard", "name": "vMonitor / vStorage", "path": "dashboards/vstorage.json" },
     { "type": "dashboard", "name": "vMonitor / vStorage (Bucket)", "path": "dashboards/vstorage-bucket.json" },
     { "type": "dashboard", "name": "vMonitor / vBackup", "path": "dashboards/vbackup.json" }
